@@ -16,7 +16,8 @@
     "ffmpeg-static": "^4.2.7",
     "pkg": "^4.4.9",
     "ytdl-core": "^4.4.5",
-    "ytpl": "^2.0.5"
+    "ytpl": "^2.0.5",
+    "ytsr": "^3.3.1"
   },
   "bin": "index.js"
 }

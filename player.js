@@ -7,7 +7,7 @@ const ytpl = require('ytpl')
 var info = 1
 
 const job = new CronJob(`*/5 * * * * *`, async () => {
-    // console.log(Date.now(), mainInfo.ultTime)
+    console.log(Date.now(), mainInfo.ultTime)
     // console.log(mainInfo.globalPlaylist.length)
     if(info === 1){
         info++

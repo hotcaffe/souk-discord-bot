@@ -26,16 +26,31 @@ var searchResultsList = []
 
 client.on("message", async message => {
     if (message.author.bot) return;
-
     if (chatAnws === 1){
         if(Number.isInteger(parseInt(message.content))){
             globalPlaylist.push(searchResultsList[parseInt(message.content)-1][2])
             console.log(globalPlaylist)
-            message.reply(`**${searchResultsList[parseInt(message.content)-1][1]}** adicionado à playlist!!!`)
+            if(!jobC.job.running){
+                globalConnection = Object.assign({}, message.member.voice.channel)
+                const connection = await message.member.voice.channel.join()
+                songData = await ytdl.getInfo(globalPlaylist[0])
+                ultTime = Date.now() + (parseInt(songData.videoDetails.lengthSeconds) * 1000) + 1
+                module.exports.connection = connection
+                module.exports.songData = songData
+                module.exports.globalPlaylist = globalPlaylist
+                module.exports.ultTime = ultTime
+                module.exports.resetPlayer = resetPlayer
+                jobC.job.start()
+                info++
+                message.reply(`**${searchResultsList[parseInt(message.content)-1][1]}** irá tocar agora!`)
+            }else{
+                message.reply(`**${searchResultsList[parseInt(message.content)-1][1]}** adicionado à playlist!!!`)
+            }
         }else{
             message.reply(`**${message.content}** não é uma opção válida para a pesquisa apresentada. Tente novamente da próxima vez, digitando um número entre 1 a 5!`)
         }
         console.log(message.content)
+        searchResultsList = []
         chatAnws = 0
     }
 
@@ -118,6 +133,8 @@ client.on("message", async message => {
     } else if (command === "skip") {
         if (message.member.voice.channel.id == globalConnection.id) {
             jobC.dispatcher.end()
+            ultTime = 0
+            module.exports.ultTime = ultTime
             message.reply("Pulei")
         }else{
             message.reply("Ta querendo sacanear o bot alheio?")
